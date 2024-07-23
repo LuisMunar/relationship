@@ -1,5 +1,7 @@
 package com.springboog.jpa.relationship;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,12 +27,24 @@ public class RelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		manyToOne();
+		findClientByIdmanyToOne();
 	}
 
-	public void manyToOne() {
-		System.out.println("Many to One");
+	public void findClientByIdmanyToOne() {
+		Optional<Client> optionalClient = clientRepository.findById(3L);
 
+		if (optionalClient.isPresent()) {
+			Client client = optionalClient.get();
+			Invoice invoice = new Invoice("Compra de celulares", 150L);
+			invoice.setClient(client);
+			Invoice invoiceResult = invoiceRepository.save(invoice);
+			System.out.println("INVOICE_RESULT => " + invoiceResult);
+		} else {
+			System.out.println("CLIENT NOT FOUND");
+		}
+	}
+
+	public void createClientAndInvoicemanyToOne() {
 		Client client = new Client("Marlon", "Gonzalez");
 		clientRepository.save(client);
 
