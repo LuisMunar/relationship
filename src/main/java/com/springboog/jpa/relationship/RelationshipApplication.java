@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springboog.jpa.relationship.entities.Address;
 import com.springboog.jpa.relationship.entities.Client;
 import com.springboog.jpa.relationship.entities.Invoice;
 import com.springboog.jpa.relationship.repositories.ClientRepository;
@@ -28,7 +29,19 @@ public class RelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		findClientByIdmanyToOne();
+		createClientAndAddressOneToMany();
+	}
+
+	@Transactional
+	public void createClientAndAddressOneToMany() {
+		Client client = new Client("Elmer", "Garito");
+
+		client.getAddresses().add(new Address("Medellin", "Calle 1", "123"));
+		client.getAddresses().add(new Address("Bogota", "Calle 2", "456"));
+		client.getAddresses().add(new Address("Cali", "Calle 3", "789"));
+
+		clientRepository.save(client);
+		System.out.println("CLIENT => " + client);
 	}
 
 	@Transactional

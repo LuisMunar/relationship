@@ -1,5 +1,6 @@
 package com.springboog.jpa.relationship.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -24,7 +25,7 @@ public class Client {
   private List<Address> addresses;
 
   public Client() {
-    this.addresses = List.of();
+    this.addresses = new ArrayList<>();
   }
 
   public Client(String name, String lastname) {
