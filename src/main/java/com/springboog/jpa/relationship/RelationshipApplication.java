@@ -31,11 +31,11 @@ public class RelationshipApplication implements CommandLineRunner {
 	}
 
 	public void findClientByIdmanyToOne() {
-		Optional<Client> optionalClient = clientRepository.findById(3L);
+		Optional<Client> optionalClient = clientRepository.findById(1L);
 
 		if (optionalClient.isPresent()) {
 			Client client = optionalClient.get();
-			Invoice invoice = new Invoice("Compra de celulares", 150L);
+			Invoice invoice = new Invoice("Compra Carro", 3000L);
 			invoice.setClient(client);
 			Invoice invoiceResult = invoiceRepository.save(invoice);
 			System.out.println("INVOICE_RESULT => " + invoiceResult);
