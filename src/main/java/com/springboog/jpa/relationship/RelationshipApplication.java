@@ -1,6 +1,7 @@
 package com.springboog.jpa.relationship;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,23 @@ public class RelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		addAndAddressToClientOneToMany();
+		deleteClientAddress();
+	}
+
+	@Transactional
+	public void deleteClientAddress() {
+		Optional<Client> clientResponse = clientRepository.findById(4L);
+
+		if (clientResponse.isPresent()) {
+			Client client = clientResponse.get();
+			System.out.println("CLIENT => " + client);
+
+			List<Address> addresses = client.getAddresses();
+			System.out.println("ADDRESSES => " + addresses);
+
+			addresses.remove(0);
+			clientRepository.save(client);
+		}
 	}
 
 	@Transactional
