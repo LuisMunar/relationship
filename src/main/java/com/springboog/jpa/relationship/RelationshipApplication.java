@@ -31,7 +31,50 @@ public class RelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		deleteClientAddress();
+		deleteClientInvoice();
+	}
+
+	@Transactional
+	public void deleteClientInvoice() {
+		Optional<Client> clientResponse = clientRepository.findById(4L);
+
+		if (clientResponse.isPresent()) {
+			Client client = clientResponse.get();
+			System.out.println("CLIENT => " + client);
+
+			List<Invoice> invoices = client.getInvoices();
+			System.out.println("INVOICES => " + invoices);
+
+			invoices.remove(1);
+			clientRepository.save(client);
+		}
+	}
+
+	@Transactional
+	public void getClient() {
+		Optional<Client> clientResponse = clientRepository.findById(4L);
+
+		if (clientResponse.isPresent()) {
+			Client client = clientResponse.get();
+			System.out.println("CLIENT => " + client);
+		}
+	}
+
+	@Transactional
+	public void addInvoicesByUserOneToMany() {
+		Optional<Client> clientResponse = clientRepository.findById(4L);
+
+		if (clientResponse.isPresent()) {
+			Client client = clientResponse.get();
+			System.out.println("CLIENT => " + client);
+
+			Invoice invoice1 = new Invoice("Compra de computadores", 200L);
+			client.addInvoice(invoice1);
+			Invoice invoice2 = new Invoice("Compra de televisores", 300L);
+			client.addInvoice(invoice2);
+
+			clientRepository.save(client);
+		}
 	}
 
 	@Transactional

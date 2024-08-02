@@ -27,8 +27,12 @@ public class Client {
   @JoinColumn(name = "client_id")
   private List<Address> addresses;
 
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "client", fetch = FetchType.EAGER)
+  private List<Invoice> invoices;
+
   public Client() {
     this.addresses = new ArrayList<>();
+    this.invoices = new ArrayList<>();
   }
 
   public Client(String name, String lastname) {
@@ -69,8 +73,21 @@ public class Client {
     this.addresses = addresses;
   }
 
+  public List<Invoice> getInvoices() {
+    return invoices;
+  }
+
+  public void setInvoices(List<Invoice> invoices) {
+    this.invoices = invoices;
+  }
+
+  public void addInvoice(Invoice invoice) {
+    invoice.setClient(this);
+    this.invoices.add(invoice);
+  }
+
   @Override
   public String toString() {
-    return "{id=" + id + ", name=" + name + ", lastname=" + lastname + ", addresses" + addresses + "}";
+    return "{id=" + id + ", name=" + name + ", lastname=" + lastname + ", addresses" + addresses + ", invoices=" + invoices + "}";
   }
 }
