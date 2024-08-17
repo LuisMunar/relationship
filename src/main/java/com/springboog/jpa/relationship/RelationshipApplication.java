@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springboog.jpa.relationship.entities.Address;
 import com.springboog.jpa.relationship.entities.Client;
+import com.springboog.jpa.relationship.entities.DetailClient;
 import com.springboog.jpa.relationship.entities.Invoice;
 import com.springboog.jpa.relationship.repositories.ClientRepository;
+import com.springboog.jpa.relationship.repositories.DetailClientRepository;
 import com.springboog.jpa.relationship.repositories.InvoiceRepository;
 
 @SpringBootApplication
@@ -25,13 +27,31 @@ public class RelationshipApplication implements CommandLineRunner {
 	@Autowired
 	private InvoiceRepository	invoiceRepository;
 
+	@Autowired
+	public DetailClientRepository detailClientRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(RelationshipApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		deleteClientInvoice();
+		createClientAndDetail();
+	}
+
+	@Transactional
+	public void createClientAndDetail() {
+		Optional<Client> clientResponse = clientRepository.findById(2L);
+
+		if (clientResponse.isPresent()) {
+			Client client = clientResponse.get();
+			System.out.println("CLIENT => " + client);
+
+			DetailClient detailClient = new DetailClient(true, 1000);
+			detailClient.setClient(client);
+
+			detailClientRepository.save(detailClient);
+		}
 	}
 
 	@Transactional
